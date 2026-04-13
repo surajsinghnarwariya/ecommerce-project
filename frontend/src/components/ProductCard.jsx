@@ -12,7 +12,7 @@ function ProductCard({ product }) {
       }}
     >
       <img
-        src={product.image}
+        src={`https://ecommerce-backend-f057.onrender.com${product.image}`}
         alt={product.name}
         style={{
           width: "100%",
@@ -29,7 +29,7 @@ function ProductCard({ product }) {
       </h2>
 
       <Link
-        to={`/product/${product.id}`}  
+        to={`/product/${product._id}`}   // ✅ FIXED
         style={{
           background: "#FFD814",
           padding: "10px",
