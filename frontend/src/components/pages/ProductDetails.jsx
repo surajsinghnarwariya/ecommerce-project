@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
+import API from "../../api"; // ✅ important
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -9,12 +10,11 @@ export default function ProductDetails() {
 
   const { addToCart } = useContext(CartContext);
 
-  // ✅ FETCH PRODUCT
+  // ✅ FETCH PRODUCT FROM BACKEND
   useEffect(() => {
-    fetch("https://ecommerce-backend-f057.onrender.com/api/products")
-      .then((res) => res.json())
-      .then((data) => {
-        const found = data.find(
+    API.get("/products")
+      .then((res) => {
+        const found = res.data.find(
           (p) => String(p._id) === String(id)
         );
         setProduct(found);
@@ -37,18 +37,22 @@ export default function ProductDetails() {
         display: "flex",
         padding: "20px",
         gap: "40px",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
       }}
     >
       {/* IMAGE */}
       <img
-        src={product.image || "https://via.placeholder.com/300"}
+        src={
+          product.image
+            ? `https://ecommerce-backend-f057.onrender.com${product.image}`
+            : "https://via.placeholder.com/300"
+        }
         alt={product.name}
         style={{
           width: "300px",
           height: "300px",
           objectFit: "cover",
-          borderRadius: "10px"
+          borderRadius: "10px",
         }}
       />
 
@@ -73,7 +77,7 @@ export default function ProductDetails() {
             border: "none",
             marginTop: "10px",
             cursor: "pointer",
-            borderRadius: "5px"
+            borderRadius: "5px",
           }}
         >
           Add to Cart
@@ -111,7 +115,7 @@ export default function ProductDetails() {
             background: "pink",
             border: "none",
             cursor: "pointer",
-            borderRadius: "5px"
+            borderRadius: "5px",
           }}
         >
           ❤️ Wishlist
@@ -128,7 +132,7 @@ export default function ProductDetails() {
             border: "none",
             marginTop: "10px",
             cursor: "pointer",
-            borderRadius: "5px"
+            borderRadius: "5px",
           }}
         >
           Buy Now

@@ -8,7 +8,10 @@ function Home() {
   // ✅ FETCH FROM BACKEND
   useEffect(() => {
     API.get("/products")
-      .then((res) => setProducts(res.data))
+      .then((res) => {
+        console.log("DATA:", res.data); // 👈 add this
+        setProducts(res.data);
+      })
       .catch((err) => console.log(err));
   }, []);
 
