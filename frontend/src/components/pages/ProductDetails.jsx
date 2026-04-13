@@ -11,10 +11,9 @@ export default function ProductDetails() {
 
   useEffect(() => {
     fetch("https://ecommerce-backend-f057.onrender.com/api/products")
-      .then(res => res.json())
+      .then(data => setProduct(data))
       .then(data => {
-        const found = data.find(p => p._id == id);
-        setProduct(found);
+        const found = data.find(p => p._id?.toString() === id); setProduct(found);
       });
   }, [id]);
 
