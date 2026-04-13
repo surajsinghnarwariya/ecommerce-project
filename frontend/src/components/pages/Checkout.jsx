@@ -31,7 +31,7 @@ export default function Checkout() {
         5000
       );
 
-      const res = await fetch("http://localhost:5000/create-order", {
+      const res = await fetch("https://ecommerce-backend-f057.onrender.com/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

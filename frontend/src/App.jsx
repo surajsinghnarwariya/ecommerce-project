@@ -17,7 +17,7 @@ function Home() {
   const { addToCart } = useContext(CartContext); // ✅ सही use
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch("https://ecommerce-backend-f057.onrender.com/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch(() =>
@@ -67,7 +67,7 @@ function Home() {
           >
             <div style={{ height: "150px", display: "flex", justifyContent: "center" }}>
               <img
-                src={p.image ? `http://localhost:5000${p.image}` : "https://via.placeholder.com/200"}
+                src={p.image ? `https://ecommerce-backend-f057.onrender.com${p.image}` : "https://via.placeholder.com/200"}
                 style={{ maxHeight: "100%" }}
               />
             </div>

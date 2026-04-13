@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api' });
+const API = axios.create({ baseURL: 'https://ecommerce-backend-f057.onrender.com/api' });
 
 // Add token if exists
 API.interceptors.request.use(config => {

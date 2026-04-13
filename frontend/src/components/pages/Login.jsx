@@ -24,7 +24,7 @@ function Login() {
   };
 
   const handleLogin = async () => {
-    const res = await fetch("http://localhost:5000/api/login", {
+    const res = await fetch("https://ecommerce-backend-f057.onrender.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

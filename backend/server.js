@@ -15,7 +15,12 @@ const app = express();
 
 // ================= MIDDLEWARE =================
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "ecommerce-project-6rulmrb00-surajsinghnarwariyas-projects.vercel.app",
+    credentials: true,
+  })
+);
 
 // ================= RAZORPAY SETUP =================
 const razorpay = new Razorpay({

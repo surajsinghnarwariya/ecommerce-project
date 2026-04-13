@@ -22,7 +22,7 @@ export default function Product() {
   return (
     <div style={{ padding: "20px" }}>
       <img
-        src={`http://localhost:5000${product.image}`}
+        src={`https://ecommerce-backend-f057.onrender.com${product.image}`}
         alt={product.name}
         style={{ width: "300px" }}
       />

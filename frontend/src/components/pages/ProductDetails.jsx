@@ -10,7 +10,7 @@ export default function ProductDetails() {
   const { addToCart } = useContext(CartContext); // ✅ context use
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch("https://ecommerce-backend-f057.onrender.com/api/products")
       .then(res => res.json())
       .then(data => {
         const found = data.find(p => p._id == id);
