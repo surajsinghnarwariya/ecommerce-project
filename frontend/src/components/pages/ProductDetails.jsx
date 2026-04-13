@@ -7,14 +7,19 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
 
-  const { addToCart } = useContext(CartContext); // ✅ context use
+  const { addToCart } = useContext(CartContext);
 
+  // ✅ FETCH PRODUCT
   useEffect(() => {
     fetch("https://ecommerce-backend-f057.onrender.com/api/products")
-      .then(data => setProduct(data))
-      .then(data => {
-        const found = data.find(p => p._id?.toString() === id); setProduct(found);
-      });
+      .then((res) => res.json())
+      .then((data) => {
+        const found = data.find(
+          (p) => String(p._id) === String(id)
+        );
+        setProduct(found);
+      })
+      .catch((err) => console.log(err));
   }, [id]);
 
   // ✅ BUY NOW
@@ -23,52 +28,69 @@ export default function ProductDetails() {
     navigate("/checkout");
   };
 
+  // ✅ LOADING
   if (!product) return <h2>Loading...</h2>;
 
   return (
-    <div style={{ display: "flex", padding: "20px", gap: "40px" }}>
-
+    <div
+      style={{
+        display: "flex",
+        padding: "20px",
+        gap: "40px",
+        flexWrap: "wrap"
+      }}
+    >
       {/* IMAGE */}
       <img
         src={product.image || "https://via.placeholder.com/300"}
         alt={product.name}
-        style={{ width: "300px", height: "300px", objectFit: "cover" }}
+        style={{
+          width: "300px",
+          height: "300px",
+          objectFit: "cover",
+          borderRadius: "10px"
+        }}
       />
 
       {/* DETAILS */}
       <div>
         <h2>{product.name}</h2>
-        <h3 style={{ color: "#B12704" }}>₹{product.price}</h3>
 
-        <p>{product.description || "No description available"}</p>
+        <h3 style={{ color: "#B12704" }}>
+          ₹{product.price}
+        </h3>
 
-        {/* ✅ ADD TO CART */}
+        <p>
+          {product.description || "No description available"}
+        </p>
+
+        {/* ADD TO CART */}
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            addToCart(product); // ✅ correct
-          }}
+          onClick={() => addToCart(product)}
           style={{
             padding: "10px 20px",
             background: "#FFD814",
             border: "none",
             marginTop: "10px",
-            cursor: "pointer"
+            cursor: "pointer",
+            borderRadius: "5px"
           }}
         >
           Add to Cart
         </button>
 
-        {/* ❤️ WISHLIST */}
+        {/* WISHLIST */}
         <button
           onClick={() => {
             const user = localStorage.getItem("user");
-            const allWishlist = JSON.parse(localStorage.getItem("wishlist")) || {};
 
             if (!user) {
               alert("Please login first ❌");
               return;
             }
+
+            const allWishlist =
+              JSON.parse(localStorage.getItem("wishlist")) || {};
 
             if (!allWishlist[user]) {
               allWishlist[user] = [];
@@ -76,7 +98,10 @@ export default function ProductDetails() {
 
             allWishlist[user].push(product);
 
-            localStorage.setItem("wishlist", JSON.stringify(allWishlist));
+            localStorage.setItem(
+              "wishlist",
+              JSON.stringify(allWishlist)
+            );
 
             alert("Added to Wishlist ❤️");
           }}
@@ -85,7 +110,8 @@ export default function ProductDetails() {
             padding: "8px",
             background: "pink",
             border: "none",
-            cursor: "pointer"
+            cursor: "pointer",
+            borderRadius: "5px"
           }}
         >
           ❤️ Wishlist
@@ -93,7 +119,7 @@ export default function ProductDetails() {
 
         <br />
 
-        {/* ⚡ BUY NOW */}
+        {/* BUY NOW */}
         <button
           onClick={buyNow}
           style={{
@@ -101,12 +127,12 @@ export default function ProductDetails() {
             background: "#FFA41C",
             border: "none",
             marginTop: "10px",
-            cursor: "pointer"
+            cursor: "pointer",
+            borderRadius: "5px"
           }}
         >
           Buy Now
         </button>
-
       </div>
     </div>
   );
