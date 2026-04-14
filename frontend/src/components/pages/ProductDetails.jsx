@@ -12,16 +12,12 @@ export default function ProductDetails() {
 
   // ✅ FETCH PRODUCT FROM BACKEND
   useEffect(() => {
-    API.get("/products")
+    API.get(`/products/${id}`)
       .then((res) => {
-        const found = res.data.find(
-          (p) => String(p._id) === String(id)
-        );
-        setProduct(found);
+        setProduct(res.data);
       })
       .catch((err) => console.log(err));
   }, [id]);
-
   // ✅ BUY NOW
   const buyNow = () => {
     addToCart(product);
