@@ -42,7 +42,7 @@ export default function Checkout() {
       const order = await res.json();
 
       const options = {
-        key: "rzp_test_ScBmMUe2t5toI0", 
+        key: "rzp_test_SdMo25wwjUBS4u", 
         amount: order.amount,
         currency: "INR",
         name: "Amazon Clone",
