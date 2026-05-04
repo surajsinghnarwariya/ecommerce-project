@@ -32,86 +32,64 @@ function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "clamp(18px, 4vw, 28px)",
+          fontSize: "28px",
           color: "white",
-          fontWeight: "bold",
-          textAlign: "center",
-          padding: "10px"
+          fontWeight: "bold"
         }}
       >
         Amazon Deals 🔥
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
-          gap: "16px",
-          padding: "16px",
-          maxWidth: "1200px",
-          margin: "0 auto"
-        }}
-      >
-        {products.map((p) => (
-          <div
-            key={p._id}
-            onClick={() => navigate(`/product/${p._id}`)}
-            style={{
-              cursor: "pointer",
-              background: "white",
-              padding: "12px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between"
-            }}
-          >
+      {products.length === 0 ? (
+        <h2 style={{ textAlign: "center", marginTop: "20px" }}>
+          Loading...
+        </h2>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
+            gap: "16px",
+            padding: "16px",
+            maxWidth: "1200px",
+            margin: "0 auto"
+          }}
+        >
+          {products.map((p) => (
             <div
+              key={p._id}
+              onClick={() => navigate(`/product/${p._id}`)}
               style={{
-                height: "150px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <img
-                src={
-                  p.image
-                    ? `https://ecommerce-backend-f057.onrender.com${p.image}`
-                    : "https://via.placeholder.com/200"
-                }
-                alt={p.name}
-                style={{ maxHeight: "100%", width: "100%", objectFit: "contain" }}
-              />
-            </div>
-
-            <h4 style={{ fontSize: "clamp(14px,2.5vw,18px)" }}>{p.name}</h4>
-
-            <p style={{ color: "#B12704", fontWeight: "bold" }}>
-              ₹{p.price}
-            </p>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart(p);
-              }}
-              style={{
-                width: "100%",
-                padding: "8px",
-                backgroundColor: "#FFD814",
-                border: "none",
-                borderRadius: "5px",
                 cursor: "pointer",
-                marginTop: "10px"
+                background: "white",
+                padding: "12px",
+                borderRadius: "10px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
               }}
             >
-              Add to Cart
-            </button>
-          </div>
-        ))}
-      </div>
+              <h4>{p.name}</h4>
+              <p style={{ color: "#B12704" }}>₹{p.price}</p>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart(p);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  backgroundColor: "#FFD814",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer"
+                }}
+              >
+                Add to Cart
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
