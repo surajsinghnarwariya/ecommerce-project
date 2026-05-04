@@ -8,6 +8,7 @@ import OrderSuccess from "./components/pages/OrderSuccess";
 import Orders from "./components/pages/Orders";
 import Wishlist from "./components/pages/Wishlist";
 import { CartProvider, CartContext } from "./context/CartContext";
+import API from "./api";
 
 /* ---------------- HOME ---------------- */
 function Home() {
@@ -16,9 +17,8 @@ function Home() {
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    fetch("https://ecommerce-backend-f057.onrender.com/api/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
+    API.get("/products")
+      .then((res) => setProducts(res.data))
       .catch(() =>
         setProducts([
           { _id: 1, name: "T-Shirt", price: 499 },
