@@ -19,13 +19,7 @@ function Home() {
   useEffect(() => {
     API.get("/products")
       .then((res) => setProducts(res.data))
-      .catch(() =>
-        setProducts([
-          { _id: 1, name: "T-Shirt", price: 499 },
-          { _id: 2, name: "Shoes", price: 999 },
-          { _id: 3, name: "Headphones", price: 1999 }
-        ])
-      );
+      .catch((err) => console.log(err));
   }, []);
 
   return (
