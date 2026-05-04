@@ -8,7 +8,8 @@ function Home() {
   useEffect(() => {
     API.get("/products")
       .then((res) => {
-        setProducts(res.data);
+        const data = res.data;
+        setProducts(data.products || data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -25,17 +26,21 @@ function Home() {
         Best Deals on Amazon
       </h1>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "16px"
-        }}
-      >
-        {products.map((item) => (
-          <ProductCard key={item._id} product={item} />
-        ))}
-      </div>
+      {products.length === 0 ? (
+        <h2 style={{ textAlign: "center" }}>Loading...</h2>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "16px"
+          }}
+        >
+          {products.map((item) => (
+            <ProductCard key={item._id} product={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

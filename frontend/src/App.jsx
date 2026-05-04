@@ -18,7 +18,10 @@ function Home() {
 
   useEffect(() => {
     API.get("/products")
-      .then((res) => setProducts(res.data))
+      .then((res) => {
+        const data = res.data;
+        setProducts(data.products || data);
+      })
       .catch((err) => console.log(err));
   }, []);
 

@@ -12,7 +12,10 @@ export default function ProductDetails() {
 
   useEffect(() => {
     API.get(`/products/${id}`)
-      .then((res) => setProduct(res.data))
+      .then((res) => {
+        const data = res.data;
+        setProduct(data.product || data);
+      })
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -27,7 +30,36 @@ export default function ProductDetails() {
     <div style={{ padding: "20px" }}>
       <h2>{product.name}</h2>
       <h3>₹{product.price}</h3>
-      <button onClick={buyNow}>Buy Now</button>
+
+      <button
+        onClick={() => addToCart(product)}
+        style={{
+          padding: "10px",
+          marginTop: "10px",
+          background: "#FFD814",
+          border: "none",
+          cursor: "pointer",
+          borderRadius: "5px"
+        }}
+      >
+        Add to Cart
+      </button>
+
+      <br />
+
+      <button
+        onClick={buyNow}
+        style={{
+          padding: "10px",
+          marginTop: "10px",
+          background: "#FFA41C",
+          border: "none",
+          cursor: "pointer",
+          borderRadius: "5px"
+        }}
+      >
+        Buy Now
+      </button>
     </div>
   );
 }
