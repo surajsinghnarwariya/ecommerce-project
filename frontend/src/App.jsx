@@ -13,8 +13,7 @@ import { CartProvider, CartContext } from "./context/CartContext";
 function Home() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-
-  const { addToCart } = useContext(CartContext); // ✅ सही use
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     fetch("https://ecommerce-backend-f057.onrender.com/api/products")
@@ -31,28 +30,34 @@ function Home() {
 
   return (
     <div style={{ backgroundColor: "#EAEDED", minHeight: "100vh" }}>
-
-      {/* HERO */}
-      <div style={{
-        height: "250px",
-        background: "linear-gradient(to right, #ff9900, #ff6600)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "28px",
-        color: "white",
-        fontWeight: "bold"
-      }}>
+      
+      <div
+        style={{
+          height: "200px",
+          background: "linear-gradient(to right, #ff9900, #ff6600)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "clamp(18px, 4vw, 28px)",
+          color: "white",
+          fontWeight: "bold",
+          textAlign: "center",
+          padding: "10px"
+        }}
+      >
         Amazon Deals 🔥
       </div>
 
-      {/* PRODUCTS */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(220px,1fr))",
-        gap: "20px",
-        padding: "20px"
-      }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
+          gap: "16px",
+          padding: "16px",
+          maxWidth: "1200px",
+          margin: "0 auto"
+        }}
+      >
         {products.map((p) => (
           <div
             key={p._id}
@@ -60,25 +65,43 @@ function Home() {
             style={{
               cursor: "pointer",
               background: "white",
-              padding: "15px",
+              padding: "12px",
               borderRadius: "10px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between"
             }}
           >
-            <div style={{ height: "150px", display: "flex", justifyContent: "center" }}>
+            <div
+              style={{
+                height: "150px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
               <img
-                src={p.image ? `https://ecommerce-backend-f057.onrender.com${p.image}` : "https://via.placeholder.com/200"}
-                style={{ maxHeight: "100%" }}
+                src={
+                  p.image
+                    ? `https://ecommerce-backend-f057.onrender.com${p.image}`
+                    : "https://via.placeholder.com/200"
+                }
+                alt={p.name}
+                style={{ maxHeight: "100%", width: "100%", objectFit: "contain" }}
               />
             </div>
 
-            <h4>{p.name}</h4>
-            <p style={{ color: "#B12704", fontWeight: "bold" }}>₹{p.price}</p>
+            <h4 style={{ fontSize: "clamp(14px,2.5vw,18px)" }}>{p.name}</h4>
+
+            <p style={{ color: "#B12704", fontWeight: "bold" }}>
+              ₹{p.price}
+            </p>
 
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                addToCart(p); // ✅ FIXED
+                addToCart(p);
               }}
               style={{
                 width: "100%",
@@ -86,7 +109,8 @@ function Home() {
                 backgroundColor: "#FFD814",
                 border: "none",
                 borderRadius: "5px",
-                cursor: "pointer"
+                cursor: "pointer",
+                marginTop: "10px"
               }}
             >
               Add to Cart
@@ -115,7 +139,7 @@ function App() {
   }, []);
 
   return (
-    <CartProvider> {/* ✅ MUST */}
+    <CartProvider>
       <BrowserRouter>
         <Navbar />
         <Routes>

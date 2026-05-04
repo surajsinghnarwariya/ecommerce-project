@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
-import API from "../../api"; // ✅ important
+import API from "../../api";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -10,7 +10,6 @@ export default function ProductDetails() {
 
   const { addToCart } = useContext(CartContext);
 
-  // ✅ FETCH PRODUCT FROM BACKEND
   useEffect(() => {
     API.get(`/products/${id}`)
       .then((res) => {
@@ -18,25 +17,30 @@ export default function ProductDetails() {
       })
       .catch((err) => console.log(err));
   }, [id]);
-  // ✅ BUY NOW
+
   const buyNow = () => {
     addToCart(product);
     navigate("/checkout");
   };
 
-  // ✅ LOADING
-  if (!product) return <h2>Loading...</h2>;
+  if (!product)
+    return (
+      <h2 style={{ textAlign: "center", marginTop: "40px" }}>
+        Loading...
+      </h2>
+    );
 
   return (
     <div
       style={{
         display: "flex",
-        padding: "20px",
-        gap: "40px",
+        padding: "16px",
+        gap: "30px",
         flexWrap: "wrap",
+        maxWidth: "1200px",
+        margin: "0 auto",
       }}
     >
-      {/* IMAGE */}
       <img
         src={
           product.image
@@ -45,30 +49,38 @@ export default function ProductDetails() {
         }
         alt={product.name}
         style={{
-          width: "300px",
-          height: "300px",
+          width: "100%",
+          maxWidth: "320px",
+          height: "auto",
           objectFit: "cover",
           borderRadius: "10px",
         }}
       />
 
-      {/* DETAILS */}
-      <div>
-        <h2>{product.name}</h2>
+      <div style={{ flex: "1", minWidth: "250px" }}>
+        <h2 style={{ fontSize: "clamp(18px, 3vw, 26px)" }}>
+          {product.name}
+        </h2>
 
-        <h3 style={{ color: "#B12704" }}>
+        <h3
+          style={{
+            color: "#B12704",
+            fontSize: "clamp(16px, 3vw, 22px)",
+          }}
+        >
           ₹{product.price}
         </h3>
 
-        <p>
+        <p style={{ lineHeight: "1.5" }}>
           {product.description || "No description available"}
         </p>
 
-        {/* ADD TO CART */}
         <button
           onClick={() => addToCart(product)}
           style={{
-            padding: "10px 20px",
+            width: "100%",
+            maxWidth: "250px",
+            padding: "10px",
             background: "#FFD814",
             border: "none",
             marginTop: "10px",
@@ -79,7 +91,6 @@ export default function ProductDetails() {
           Add to Cart
         </button>
 
-        {/* WISHLIST */}
         <button
           onClick={() => {
             const user = localStorage.getItem("user");
@@ -106,8 +117,10 @@ export default function ProductDetails() {
             alert("Added to Wishlist ❤️");
           }}
           style={{
+            width: "100%",
+            maxWidth: "250px",
             marginTop: "10px",
-            padding: "8px",
+            padding: "10px",
             background: "pink",
             border: "none",
             cursor: "pointer",
@@ -117,13 +130,12 @@ export default function ProductDetails() {
           ❤️ Wishlist
         </button>
 
-        <br />
-
-        {/* BUY NOW */}
         <button
           onClick={buyNow}
           style={{
-            padding: "10px 20px",
+            width: "100%",
+            maxWidth: "250px",
+            padding: "10px",
             background: "#FFA41C",
             border: "none",
             marginTop: "10px",

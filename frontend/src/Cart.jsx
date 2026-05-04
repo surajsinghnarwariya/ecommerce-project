@@ -18,26 +18,56 @@ function Cart() {
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>🛒 Your Cart</h1>
+    <div style={{ padding: "16px", maxWidth: "900px", margin: "0 auto" }}>
+      <h1 style={{ textAlign: "center" }}>🛒 Your Cart</h1>
 
       {cart.length === 0 ? (
-        <p>Cart is empty</p>
+        <p style={{ textAlign: "center" }}>Cart is empty</p>
       ) : (
         cart.map((item, i) => (
-          <div key={i} style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "10px"
-          }}>
-            <span>{item.name}</span>
-            <span>₹{item.price}</span>
-            <button onClick={() => removeItem(i)}>Remove</button>
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "10px",
+              background: "#fff",
+              padding: "12px",
+              borderRadius: "8px",
+              marginBottom: "10px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+            }}
+          >
+            <span style={{ flex: "1", minWidth: "150px" }}>
+              {item.name}
+            </span>
+
+            <span style={{ fontWeight: "bold" }}>
+              ₹{item.price}
+            </span>
+
+            <button
+              onClick={() => removeItem(i)}
+              style={{
+                padding: "6px 12px",
+                border: "none",
+                background: "#ff4d4f",
+                color: "white",
+                borderRadius: "5px",
+                cursor: "pointer"
+              }}
+            >
+              Remove
+            </button>
           </div>
         ))
       )}
 
-      <h2>Total: ₹{total}</h2>
+      <h2 style={{ textAlign: "right", marginTop: "20px" }}>
+        Total: ₹{total}
+      </h2>
     </div>
   );
 }

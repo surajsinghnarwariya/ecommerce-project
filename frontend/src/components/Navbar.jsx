@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaBars } from "react-icons/fa";
 
 function Navbar() {
   const navigate = useNavigate();
 
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState(localStorage.getItem("user"));
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // ✅ LOGOUT FIX
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -17,7 +17,6 @@ function Navbar() {
     navigate("/login");
   };
 
-  // ✅ CART UPDATE
   useEffect(() => {
     const updateCart = () => {
       const allCarts = JSON.parse(localStorage.getItem("carts")) || {};
@@ -27,7 +26,6 @@ function Navbar() {
     };
 
     updateCart();
-
     window.addEventListener("cartUpdated", updateCart);
 
     return () => {
@@ -35,7 +33,6 @@ function Navbar() {
     };
   }, []);
 
-  // ✅ USER UPDATE
   useEffect(() => {
     const updateUser = () => {
       setUser(localStorage.getItem("user"));
@@ -49,35 +46,54 @@ function Navbar() {
   }, []);
 
   return (
-    <div style={{
-      backgroundColor: "#131921",
-      color: "white",
-      display: "flex",
-      alignItems: "center",
-      gap: "15px",
-      padding: "10px 20px"
-    }}>
-
-      {/* LOGO */}
-      <h2 style={{ minWidth: "120px", cursor: "pointer" }} onClick={() => navigate("/")}>
-        amazon.in
-      </h2>
-
-      {/* SEARCH */}
-      <input
-        placeholder="Search Amazon.in"
+    <div style={{ backgroundColor: "#131921", color: "white" }}>
+      
+      <div
         style={{
-          flex: 1,
-          height: "20px",
-          padding: "10px",
-          borderRadius: "5px",
-          border: "none"
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "10px 16px",
+          flexWrap: "wrap",
+          gap: "10px"
         }}
-      />
+      >
+        <h2
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        >
+          amazon.in
+        </h2>
 
-      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+        <input
+          placeholder="Search Amazon.in"
+          style={{
+            flex: 1,
+            minWidth: "180px",
+            height: "20px",
+            padding: "10px",
+            borderRadius: "5px",
+            border: "none"
+          }}
+        />
 
-        {/* USER */}
+        <div
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{ cursor: "pointer", fontSize: "20px" }}
+        >
+          <FaBars />
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: menuOpen ? "flex" : "none",
+          flexDirection: "column",
+          gap: "15px",
+          padding: "10px 16px",
+          borderTop: "1px solid #333"
+        }}
+      >
         <div>
           <div style={{ fontSize: "12px" }}>
             Hello, {user || "User"}
@@ -87,12 +103,10 @@ function Navbar() {
           </div>
         </div>
 
-        {/* HOME */}
         <div onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
           Home
         </div>
 
-        {/* LOGIN / LOGOUT */}
         {user ? (
           <div onClick={handleLogout} style={{ cursor: "pointer" }}>
             Logout
@@ -103,17 +117,14 @@ function Navbar() {
           </div>
         )}
 
-        {/* ORDERS */}
         <div onClick={() => navigate("/orders")} style={{ cursor: "pointer" }}>
           Orders
         </div>
 
-        {/* WISHLIST */}
         <div onClick={() => navigate("/wishlist")} style={{ cursor: "pointer" }}>
           ❤️ Wishlist
         </div>
 
-        {/* CART */}
         <div
           onClick={() => navigate("/checkout")}
           style={{ cursor: "pointer", display: "flex", gap: "5px" }}
@@ -121,7 +132,6 @@ function Navbar() {
           <FaShoppingCart />
           Cart ({cart.length})
         </div>
-
       </div>
     </div>
   );
