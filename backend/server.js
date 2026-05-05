@@ -15,17 +15,21 @@ const app = express();
 
 // ================= MIDDLEWARE =================
 app.use(express.json());
-app.use(
-  cors({
-    origin: "ecommerce-project-6rulmrb00-surajsinghnarwariyas-projects.vercel.app",
-    credentials: true,
-  })
-);
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://ecommerce-project-covbzl4g-surajsinghnarwariyas-projects.vercel.app"
+  ],
+  credentials: true
+}));
+
+app.options("*", cors());
 
 // ================= RAZORPAY SETUP =================
 const razorpay = new Razorpay({
-  key_id: "rzp_test_ScBmMUe2t5toI0",
-  key_secret: "o7SugJvzMBXjHB9CWvusyuEa",
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 // ================= ROUTES =================
@@ -33,13 +37,13 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// 🔥 CREATE ORDER API (IMPORTANT)
+// CREATE ORDER
 app.post("/create-order", async (req, res) => {
   try {
     const { amount } = req.body;
 
     const options = {
-      amount: amount * 100, // ₹ to paise
+      amount: amount * 100,
       currency: "INR",
     };
 
@@ -52,22 +56,18 @@ app.post("/create-order", async (req, res) => {
   }
 });
 
-// AUTH ROUTES
+// OTHER ROUTES
 app.use("/api/auth", authRoutes);
-
-// PRODUCT ROUTES
 app.use("/api/products", productRoutes);
-
-// ORDER ROUTES
 app.use("/api/orders", orderRoutes);
 
-// ================= MONGODB CONNECTION =================
+// ================= DB =================
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-// ================= ERROR HANDLER =================
-app.use((req, res, next) => {
+// ================= ERROR =================
+app.use((req, res) => {
   res.status(404).json({ message: "Route Not Found" });
 });
 
