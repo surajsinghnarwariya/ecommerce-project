@@ -5,42 +5,33 @@ import API from "../../api";
 function Home() {
   const [products, setProducts] = useState([]);
 
+  // ✅ FETCH FROM BACKEND
   useEffect(() => {
     API.get("/products")
       .then((res) => {
-        const data = res.data;
-        setProducts(data.products || data);
+        console.log("DATA:", res.data); // 👈 add this
+        setProducts(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
 
   return (
-    <div style={{ padding: "16px", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1
+    <div style={{ padding: "20px" }}>
+
+      <h1 style={{ marginBottom: "20px" }}>Best Deals on Amazon</h1>
+
+      <div
         style={{
-          marginBottom: "20px",
-          fontSize: "clamp(20px, 4vw, 32px)",
-          textAlign: "center"
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "20px"
         }}
       >
-        Best Deals on Amazon
-      </h1>
+        {products.map((item) => (
+          <ProductCard key={item._id} product={item} />
+        ))}
+      </div>
 
-      {products.length === 0 ? (
-        <h2 style={{ textAlign: "center" }}>Loading...</h2>
-      ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "16px"
-          }}
-        >
-          {products.map((item) => (
-            <ProductCard key={item._id} product={item} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

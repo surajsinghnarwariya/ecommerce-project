@@ -8,91 +8,92 @@ import OrderSuccess from "./components/pages/OrderSuccess";
 import Orders from "./components/pages/Orders";
 import Wishlist from "./components/pages/Wishlist";
 import { CartProvider, CartContext } from "./context/CartContext";
-import API from "./api";
 
 /* ---------------- HOME ---------------- */
 function Home() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-  const { addToCart } = useContext(CartContext);
+
+  const { addToCart } = useContext(CartContext); // ✅ सही use
 
   useEffect(() => {
-    API.get("/products")
-      .then((res) => {
-        const data = res.data;
-        setProducts(data.products || data);
-      })
-      .catch((err) => console.log(err));
+    fetch("https://ecommerce-backend-f057.onrender.com/api/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch(() =>
+        setProducts([
+          { _id: 1, name: "T-Shirt", price: 499 },
+          { _id: 2, name: "Shoes", price: 999 },
+          { _id: 3, name: "Headphones", price: 1999 }
+        ])
+      );
   }, []);
 
   return (
     <div style={{ backgroundColor: "#EAEDED", minHeight: "100vh" }}>
-      
-      <div
-        style={{
-          height: "200px",
-          background: "linear-gradient(to right, #ff9900, #ff6600)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "28px",
-          color: "white",
-          fontWeight: "bold"
-        }}
-      >
+
+      {/* HERO */}
+      <div style={{
+        height: "250px",
+        background: "linear-gradient(to right, #ff9900, #ff6600)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "28px",
+        color: "white",
+        fontWeight: "bold"
+      }}>
         Amazon Deals 🔥
       </div>
 
-      {products.length === 0 ? (
-        <h2 style={{ textAlign: "center", marginTop: "20px" }}>
-          Loading...
-        </h2>
-      ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
-            gap: "16px",
-            padding: "16px",
-            maxWidth: "1200px",
-            margin: "0 auto"
-          }}
-        >
-          {products.map((p) => (
-            <div
-              key={p._id}
-              onClick={() => navigate(`/product/${p._id}`)}
+      {/* PRODUCTS */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(220px,1fr))",
+        gap: "20px",
+        padding: "20px"
+      }}>
+        {products.map((p) => (
+          <div
+            key={p._id}
+            onClick={() => navigate(`/product/${p._id}`)}
+            style={{
+              cursor: "pointer",
+              background: "white",
+              padding: "15px",
+              borderRadius: "10px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+            }}
+          >
+            <div style={{ height: "150px", display: "flex", justifyContent: "center" }}>
+              <img
+                src={p.image ? `https://ecommerce-backend-f057.onrender.com${p.image}` : "https://via.placeholder.com/200"}
+                style={{ maxHeight: "100%" }}
+              />
+            </div>
+
+            <h4>{p.name}</h4>
+            <p style={{ color: "#B12704", fontWeight: "bold" }}>₹{p.price}</p>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                addToCart(p); // ✅ FIXED
+              }}
               style={{
-                cursor: "pointer",
-                background: "white",
-                padding: "12px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                width: "100%",
+                padding: "8px",
+                backgroundColor: "#FFD814",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer"
               }}
             >
-              <h4>{p.name}</h4>
-              <p style={{ color: "#B12704" }}>₹{p.price}</p>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart(p);
-                }}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  backgroundColor: "#FFD814",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer"
-                }}
-              >
-                Add to Cart
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+              Add to Cart
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -114,7 +115,7 @@ function App() {
   }, []);
 
   return (
-    <CartProvider>
+    <CartProvider> {/* ✅ MUST */}
       <BrowserRouter>
         <Navbar />
         <Routes>
